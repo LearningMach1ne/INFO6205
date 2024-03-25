@@ -60,11 +60,13 @@ public class Position {
         if (player == last) throw new RuntimeException("consecutive moves by same player: " + player);
         int[][] matrix = copyGrid();
         if (matrix[x][y] < 0) {
-            // TO BE IMPLEMENTED 
-             return null;
+            // TO BE IMPLEMENTED
+            matrix[x][y] = player;
+            return new Position(matrix, count + 1, player);
             // END SOLUTION
+        } else {
+            throw new RuntimeException("Position is occupied: " + x + ", " + y);
         }
-        throw new RuntimeException("Position is occupied: " + x + ", " + y);
     }
 
     /**
@@ -77,9 +79,10 @@ public class Position {
         List<int[]> result = new ArrayList<>();
         for (int i = 0; i < gridSize; i++)
             for (int j = 0; j < gridSize; j++)
-                if (grid[i][j] < 0)
-                    // TO BE IMPLEMENTED 
-         ;
+                if (grid[i][j] < 0) {
+                    result.add(new int[]{i,j});
+                }
+                    // TO BE IMPLEMENTED
         // END SOLUTION
         return result;
     }
@@ -140,11 +143,17 @@ public class Position {
      * @return true if there are three cells in a line that are the same and equal to the last player.
      */
     boolean threeInARow() {
-        // TO BE IMPLEMENTED 
-         return false;
-        // END SOLUTION
+        for (int i = 0; i < gridSize; i++) {
+            if (checkLine(projectRow(i)) || checkLine(projectCol(i))) {
+                return true;
+            }
+        }
+        return checkLine(projectDiag(true)) || checkLine(projectDiag(false));
     }
 
+    private boolean checkLine(int[] line) {
+        return line[0] == last && line[1] == last && line[2] == last;
+    }
     /**
      * Project row i.
      *
